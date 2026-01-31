@@ -2,11 +2,11 @@
   "name": "rest-api",
   "version": "1.0.0",
   "description": "rest api",
-  "main": "dist/Server.js",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
     "build": "tsc",
-    "start": "node dist/Server.js"
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

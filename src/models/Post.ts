@@ -2,7 +2,7 @@ import mongoose, { Schema, InferSchemaType } from "mongoose";
 
 const PostSchema = new Schema(
   {
-    senderId: { type: Schema.Types.ObjectId, required: true, index: true },
+    senderId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
     message: { type: String, required: true },
   }
 );

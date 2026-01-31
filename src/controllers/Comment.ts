@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { CommentModel } from "../models/Comment";
+import { UserModel } from "../models/User";
 import { PostModel } from "../models/Post";
 import { BadRequestError, NotFoundError } from "../utils/ErrorHandling";
 
@@ -11,6 +12,9 @@ export const createComment = async (req: Request, res: Response) => {
 
   const doesPostExist = await PostModel.exists({ _id: postId });
   if (!doesPostExist) return NotFoundError(res, "Post not found for this postId");
+
+  const doesUserExist = await UserModel.exists({ _id: senderId });
+  if (!doesUserExist) return NotFoundError(res, "User not found for this senderId");
 
   const created = await CommentModel.create({ postId, senderId, message });
   return res.status(201).json(created);

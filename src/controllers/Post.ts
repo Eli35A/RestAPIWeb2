@@ -1,11 +1,15 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { PostModel } from "../models/Post";
+import { UserModel } from "../models/User";
 import { BadRequestError, NotFoundError } from "../utils/ErrorHandling";
 
 export const addPost = async (req: Request, res: Response) => {
   const { senderId, message } = req.body ?? {};
   if (!senderId || !message) return BadRequestError(res, "senderId and message are required");
+
+  const doesUserExist = await UserModel.exists({ _id: senderId });
+  if (!doesUserExist) return NotFoundError(res, "User not found for this senderId");
 
   const created = await PostModel.create({ senderId, message });
   return res.status(201).json(created);

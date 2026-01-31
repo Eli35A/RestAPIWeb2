@@ -3,7 +3,7 @@ import mongoose, { Schema, InferSchemaType } from "mongoose";
 const CommentSchema = new Schema(
   {
     postId: { type: Schema.Types.ObjectId, ref: "Post", required: true, index: true },
-    senderId: { type: Schema.Types.ObjectId, required: true },
+    senderId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     message: { type: String, required: true },
   }
 );
