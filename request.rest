@@ -1,60 +1,161 @@
-### 1) Add a New Post
-POST http://localhost:3000/posts
+@baseUrl = http://localhost:3000
+
+### Health
+GET {{baseUrl}}/health
+
+############################################
+### Auth
+############################################
+
+### Register
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "senderId": "60f7f7a2c2b4f21a4c0d5678",
+  "username": "eli",
+  "email": "eli@example.com",
+  "password": "1234",
+  "bio": "Hello"
+}
+
+### Login (copy tokens from response)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "emailOrUsername": "eli",
+  "password": "1234"
+}
+
+@accessToken = REPLACE_ME
+@refreshToken = REPLACE_ME
+
+### Refresh
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Logout
+POST {{baseUrl}}/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+############################################
+### Users (CRUD)
+############################################
+
+### Create a user
+POST {{baseUrl}}/users
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "username": "Meow",
+  "email": "cookie@example.com",
+  "password": "1234",
+  "bio": "Eli here"
+}
+
+### Get all users
+GET {{baseUrl}}/users
+Authorization: Bearer {{accessToken}}
+
+@userId = REPLACE_ME
+
+### Get user by id
+GET {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+
+### Update user
+PUT {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "bio": "Updated bio"
+}
+
+### Delete user
+DELETE {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+
+############################################
+### Posts (CRUD)
+############################################
+
+### Create post (logged-in user is the sender)
+POST {{baseUrl}}/posts
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
   "message": "Hello from my first post!"
 }
 
-### 2) Get All Posts
-GET http://localhost:3000/posts
+@postId = REPLACE_ME
 
-### 3) Get a Post by ID
-@postId = 697bff374547ac80dcd8cbff
-GET http://localhost:3000/posts/{{postId}}
+### Get all posts
+GET {{baseUrl}}/posts
 
-### 4) Get Posts by senderId
-GET http://localhost:3000/posts?senderId=60f7f7a2c2b4f21a4c0d5678
+### Get posts by sender
+GET {{baseUrl}}/posts?sender={{userId}}
 
-### 5) Update a Post (PUT)
-PUT http://localhost:3000/posts/{{postId}}
+### Get post by id
+GET {{baseUrl}}/posts/{{postId}}
+
+### Update post (owner only)
+PUT {{baseUrl}}/posts/{{postId}}
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "senderId": "60f7f7a2c2b4f21a4c0d5678",
   "message": "Updated message"
 }
 
-### Create a Comment
-POST http://localhost:3000/comments
+### Delete post (owner only)
+DELETE {{baseUrl}}/posts/{{postId}}
+Authorization: Bearer {{accessToken}}
+
+############################################
+### Comments (CRUD)
+############################################
+
+### Add comment to post (logged-in user is the sender)
+POST {{baseUrl}}/posts/{{postId}}/comments
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-  "postId": "{{postId}}",
-  "senderId": "60f7f7a2c2b4f21a4c0d5678",
   "message": "Nice post!"
 }
 
-### Get All Comments
-GET http://localhost:3000/comments
+### Get comments for a post
+GET {{baseUrl}}/posts/{{postId}}/comments
 
-### Get Comment by ID
-@commentId = 697bff844547ac80dcd8cc0a
-GET http://localhost:3000/comments/{{commentId}}
+### Get all comments
+GET {{baseUrl}}/comments
 
-### Update a Comment (PUT)
-PUT http://localhost:3000/comments/{{commentId}}
+@commentId = REPLACE_ME
+
+### Get comment by id
+GET {{baseUrl}}/comments/{{commentId}}
+
+### Update comment (owner only)
+PUT {{baseUrl}}/comments/{{commentId}}
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
   "postId": "{{postId}}",
-  "senderId": "60f7f7a2c2b4f21a4c0d5678",
   "message": "Edited my comment"
 }
 
-### Delete a Comment
-DELETE http://localhost:3000/comments/{{commentId}}
-
-### Get All Comments for a Specific Post
-GET http://localhost:3000/posts/{{postId}}/comments
+### Delete comment (owner only)
+DELETE {{baseUrl}}/comments/{{commentId}}
+Authorization: Bearer {{accessToken}}
