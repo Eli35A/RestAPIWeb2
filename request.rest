@@ -1,0 +1,60 @@
+### 1) Add a New Post
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+  "senderId": "60f7f7a2c2b4f21a4c0d5678",
+  "message": "Hello from my first post!"
+}
+
+### 2) Get All Posts
+GET http://localhost:3000/posts
+
+### 3) Get a Post by ID
+@postId = 697bff374547ac80dcd8cbff
+GET http://localhost:3000/posts/{{postId}}
+
+### 4) Get Posts by senderId
+GET http://localhost:3000/posts?senderId=60f7f7a2c2b4f21a4c0d5678
+
+### 5) Update a Post (PUT)
+PUT http://localhost:3000/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "senderId": "60f7f7a2c2b4f21a4c0d5678",
+  "message": "Updated message"
+}
+
+### Create a Comment
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+  "postId": "{{postId}}",
+  "senderId": "60f7f7a2c2b4f21a4c0d5678",
+  "message": "Nice post!"
+}
+
+### Get All Comments
+GET http://localhost:3000/comments
+
+### Get Comment by ID
+@commentId = 697bff844547ac80dcd8cc0a
+GET http://localhost:3000/comments/{{commentId}}
+
+### Update a Comment (PUT)
+PUT http://localhost:3000/comments/{{commentId}}
+Content-Type: application/json
+
+{
+  "postId": "{{postId}}",
+  "senderId": "60f7f7a2c2b4f21a4c0d5678",
+  "message": "Edited my comment"
+}
+
+### Delete a Comment
+DELETE http://localhost:3000/comments/{{commentId}}
+
+### Get All Comments for a Specific Post
+GET http://localhost:3000/posts/{{postId}}/comments
