@@ -16,5 +16,7 @@ export const swaggerSpec = swaggerJSDoc({
           bearerFormat: "JWT",
         },
       },
-    },
-  }});
+    }
+  },
+  apis: process.env.NODE_ENV === "production" ? ["./dist/routes/*.js"] : ["./src/routes/*.ts"],
+});
